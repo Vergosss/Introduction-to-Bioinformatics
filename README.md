@@ -1,0 +1,1 @@
+This repository contains the two compulsory projects for the elective course 'Introduction to Bioinformatics'. The first project folder includes the project's python source code, report as well as auxilliary files in fasta and pdb format. 
