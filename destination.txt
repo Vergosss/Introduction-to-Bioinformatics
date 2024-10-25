@@ -1,0 +1,6 @@
+CATGTGGTTA ,position: 252
+AGACAGC ,position: 297
+AGACAGC ,position: 1037
+TTGGGAAG ,position: 448
+GTGGGAAT ,position: 554
+CTGGGAGT ,position: 791

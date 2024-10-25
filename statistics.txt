@@ -1,0 +1,2 @@
+Base count of the sequence: 1397
+Gc percentage: 40.873299928418035%

@@ -1,65 +1,65 @@
+import regex as re
+from Bio import SeqIO
+from Bio.Seq import Seq
 from Bio.SeqIO import parse
 from Bio.SeqRecord import SeqRecord
-from Bio.Seq import Seq
-from Bio.SeqUtils import gc_fraction, GC_skew
-import re
-file = open("sequence.fasta")#anigo ena arxeio fasta
-records = parse(file, "fasta")#
-for record in records:
-    print('Sequence name: %s ' % record.name)
-    print("Sequence Data: %s" % record.seq)
-    #print("Sequence Alphabet: %s" % record.seq.alphabet)
+from Bio.SeqUtils import gc_fraction  # gia to pososto GC se sxesh me thn akolouthia
 
-a_seq = Seq("ATGCATGCATGCATGCATGCATG")
+seq = []
+records = []
+with open('sequence.fasta', 'r') as file:
+    # seq = file.read()
+    records = parse(file, "fasta")
+    for record in records:
+        seq = record.seq  # einai sequence
 
-def complementarySequence(seq):
-    complement = seq.complement()
-
-    with open('complementaryAndTranscriptingSequence.fasta', 'w') as file:
-        file.write(">complementarySequence\n")
-        file.write(str(complement))
-    file.close()
-    ####
-    transcribe = seq.transcribe()
-    with open('complementaryAndTranscriptingSequence.fasta','a') as file:
-        file.write("\n>TranscriptingSequence\n")
-        file.write(str(transcribe))
-    file.close()
+# print(seq)
+seq = str(seq)  # thn kano string
+sequence = Seq(seq)
+# input('...')
+print(sequence)
 #######
+print('Base count of the sequence: ' + str(len(sequence)) + '\nGc percentage: ' + str(100 * gc_fraction(sequence)) + '%')
 
-# Fills Z array for given string str[]
+#######
+RUNX1 = re.finditer('[CGT][ACT]TGTGGT[CT][AT]', seq, overlapped=True)
+# BHTGTGGTYW
+TGIF1 = re.finditer('[AT]GACAG[CGT]', seq, overlapped=True)
+# WGACAGB
+IKZF1 = re.finditer('[CGT]TGGGA[AG][AGT]', seq, overlapped=True)
+# BTGGGARD
+# print('RUNX1 : ',RUNX1)
+with open('destination.txt', 'w') as destination:
+    for match in RUNX1:
+        print(match.group(), "start: ", match.start())
+        destination.write(str(match.group()) + " ,position: " + str(match.start()) + '\n')
 
+    for match in TGIF1:
+        print(match.group(), "start: ", match.start())
+        destination.write(str(match.group()) + " ,position: " + str(match.start()) + '\n')
 
+    for match in IKZF1:
+        print(match.group(), "start: ", match.start())
+        destination.write(str(match.group()) + " ,position: " + str(match.start()) + '\n')
+    # ousiastika to start() metra posoi xaraktires yparxoun prin.Diladi h arxh tis akolouthias prin einai 0 den yparxei kanenas
+    # xaraktiras prin, eno to 505 px simenei edo pou einai o kersoras exo 505 xaraktires prin kai h zhtoumenh ypoakolouthia einai
+    # amesos meta
 
-######
-def stats(seq):
-    with open('sequenceStats.txt','w') as file:
-        file.write("Sequence Length: " + str(len(seq)) + "\n" + "gc_ratio: " + str((seq.count('G') + seq.count('C'))/len(seq)) + '\n')
-    file.close()
-    return (seq.count('G') + seq.count('C'))/len(seq)
-
-
-complementarySequence(a_seq)
-print(len(record.seq))
-print(stats(record.seq))
-print(gc_fraction(record.seq))
+# print('IKZF1 : ',IKZF1)
 
 ###
-new_seq = str(Seq("ATGCATGCATGCATGCATGCATG"))
-sub_seq = "ATG"
-#print(new_seq.search(sub_seq))
-runx1 = re.findall("[CGT]TGTGGT[CT][AT]", str(record.seq))
-tgif1 = re.finditer("[AT]GACAG[CGT]",str(record.seq))
-ikzf1 = re.finditer("[CGT]TGGGA[AG][AGT]",str(record.seq))
-y = re.search("[AT]GACAG[CGT]",str(record.seq))
-print(tgif1)
-print(y.start())
-print(ikzf1)
-print(runx1)
-for match in tgif1:
-    print(match.start())
-for match in ikzf1:
-    print(match)
-    print(match.start())
-for match in runx1:
-    print(match)
+
+
+new_sequences = []
+new_sequences.append(SeqRecord(sequence.complement(), name='Complementary Sequence'))
+new_sequences.append(SeqRecord(sequence.transcribe(), name='Transcribed Sequence'))
+
+# input('...')
+
+# grafo ta statistika(arithmos vaseon tis akolouthias kai to gc pososto) tis akolouthias se ena ksexoristo arxeio
+# epishs grafo tis dyo nees akolouthies(th sybliromatikh kai thn metagrafomenh ) se ksexoristo arxeio
+with open('statistics.txt', 'w') as statistics:
+    statistics.write('Base count of the sequence: ' + str(len(sequence)) + '\nGc percentage: ' + str(100 * gc_fraction(sequence)) + '%')
+with open('complementary-transcription-sequence.fasta', 'w') as sequences:
+    SeqIO.write(new_sequences, sequences, 'fasta')
+
